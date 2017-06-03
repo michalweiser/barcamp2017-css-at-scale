@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=1024" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>BarCamp 2017 | Web Front-End Workflow | by Michal Weiser @michal_weiser</title>
+    <title>BarCamp 2017 | CSS at scale | by Michal Weiser @michal_weiser</title>
 
     <meta name="description" content="Presentation for BarCamp 2017" />
     <meta name="author" content="Michal Weiser" />
@@ -13,11 +13,17 @@
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
 
     <link href="css/impress-demo.css" rel="stylesheet" />
+    <link href="css/prism.css" rel="stylesheet" />
     <link href="style.css" rel="stylesheet" />
 
     <link rel="shortcut icon" href="favicon.png" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <script src="raphael.min.js"></script>
+    <script src="js/prism.js"></script>
+    <script src="https://threejs.org/build/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/libs/tween.min.js"></script>
+    <script src="https://threejs.org/examples/js/controls/TrackballControls.js"></script>
+    <script src="https://threejs.org/examples/js/renderers/CSS3DRenderer.js"></script>
     <script>
       window.invert = function invert() {
           // the css we are going to inject
@@ -59,7 +65,7 @@
       <h3>Ahoj!</h3>
     </div>
     <div id="link" class="step link" data-x="-1100" data-y="-2000">
-      <a href="http://tiny.cc/web-workflows">tiny.cc/web-workflows</a>
+      <a href="http://tiny.cc/css-at-scale">tiny.cc/css-at-scale</a>
     </div>
     <div id="hi" class="step hi" data-x="400" data-y="-1500">
         <a href="https://www.linkedin.com/in/michalweiser/" title="Michał Weiser" target="_blank"><img alt="Michał Weiser" src="img/me.png" class="badge big"></a>
@@ -70,514 +76,214 @@
         </nav>
     </div>
 
-    <div id="timeline" class="step" data-x="2600" data-y="-1500" scale="4">
-      <div id="canvas_container"></div>
-      <script>
-        var paper = new Raphael(document.getElementById('canvas_container'), 1000, 500);
-        var linePosition = 450;
-        function tickAt(where, size, text) {
-          var line = paper.path( 'M' + where + ',' + (linePosition - size) + ' L' + where + ',' + linePosition );
-          var text = paper.text(where, linePosition + 20, text);
-          line.attr({
-            'stroke': 'white',
-            'stroke-width': 3
-          });
-          text.attr({
-            'fill': 'white',
-            'stroke-width': 0,
-            'font-family': 'Arial',
-            'font-size': 20
-          });
-          return line;
-        }
-
-        function badge(paper, where, fromLine, width, height, src, attr) {
-          var badge = paper.image(src, where - (width/2), linePosition - fromLine - height, width, height);
-          attr && badge.attr(attr);
-          return badge;
-        }
-
-        badge(paper, 750, -1, 300, 200, 'img/messhalf.jpg');
-        var line = paper.path( 'M50,' + linePosition + ' L900,' + linePosition );
-        line.attr({
-          'stroke': 'white',
-          'stroke-width': 3
-        });
-
-        badge(paper, 50, 30, 40, 40, 'img/html.jpg', {
-          href: 'https://en.wikipedia.org/wiki/HTML',
-          target: '_blank',
-          title: 'HTML'
-        });
-        tickAt(50, 20, '1993');
-        badge(paper, 100, 30, 40, 40, 'img/js.png', {
-          href: 'https://en.wikipedia.org/wiki/JavaScript',
-          target: '_blank',
-          title: 'JavaScript'
-        });
-        tickAt(100, 20, '1995');
-        badge(paper, 150, 30, 40, 40, 'img/css.png', {
-          href: 'https://en.wikipedia.org/wiki/Cascading_Style_Sheets',
-          target: '_blank',
-          title: 'CSS'
-        });
-        tickAt(150, 20, '1996');
-        tickAt(450, 20, '2006');
-        badge(paper, 450, 30, 40, 40, 'img/jquery.png', {
-          href: 'https://jquery.com/',
-          target: '_blank',
-          title: 'jQuery'
-        });
-        tickAt(550, 20, '2009');
-        badge(paper, 550, 30, 40, 40, 'img/nodejs.png', {
-          href: 'https://nodejs.org/en/',
-          target: '_blank',
-          title: 'node.js'
-        });
-        tickAt(650, 20, '2011');
-        badge(paper, 650, 30, 70, 30, 'img/npm.svg', {
-          href: 'https://www.npmjs.com/',
-          target: '_blank',
-          title: 'npm'
-        });
-
-        tickAt(800, 20, '2015');
-        badge(paper, 800, 30, 40, 40, 'img/react.png', {
-          href: '',
-          target: '_blank',
-          title: 'React'
-        });
-
-        badge(paper, 890, 30, 40, 40, 'img/webassembly.png', {
-          href: '',
-          target: '_blank',
-          title: 'WebAssembly'
-        });
-        tickAt(900, 200, 'now');
-      </script>
+    <div id="periodic" class="step" data-x="1000" data-y="-2500" style="width: 1500px; height: 800px;">
+      <div id="container"></div>
+      <div id="menu">
+        <button id="table">TABLE</button>
+        <button id="sphere">SPHERE</button>
+        <button id="helix">HELIX</button>
+        <button id="grid">GRID</button>
+      </div>
     </div>
 
-    <div id="historicalcode" class="step" data-x="1000" data-y="-2500" style="width: 580px;">
-      <pre>
-          <code class="code">
-<span class="red">var</span> <span class="blue">form</span> = <span class="blue">document.forms[<span class="green">0</span>]</span>;
-<span class="red">if</span> (<span class="blue">form.name.length</span> == <span class="green">0</span>) {
-    <span class="red">alert</span>(<span class="green">'Please fill your name.'</span>);
-    <span class="red">return</span> <span class="blue">false</span>;
-}
-          </code>
-      </pre>
+    <div id="timeline" class="cssawe step" data-x="3000" data-y="-1500" scale="4">
+      <img src="img/cssawe.png" alt="CSS Awesome" class="awesome">
     </div>
 
-    <div id="historical" class="step list" data-x="2800" data-y="-2500" style="width: 430px;">
-      <h5>Historické knihovny</h5>
-      <a href="https://jquery.com/" title="jQuery" target="_blank"><img alt="jQuery" src="img/jquery.png" class="badge small"></a>
-      <a href="https://jqueryui.com/" title="jQuery UI" target="_blank"><img alt="jQuery UI" src="img/jqueryui.gif" class="badge small"></a>
-      <a href="http://yuilibrary.com/" title="YUI" target="_blank"><img alt="YUI" src="img/yui.png" class="badge small"></a>
-      <br>
-      <a href="https://dojotoolkit.org/" title="dojo" target="_blank"><img alt="dojo" src="img/dojo.png" class="badge"></a>
-      <a href="https://www.sencha.com/products/extjs/" title="Ext JS" target="_blank"><img alt="Ext JS" src="img/extjs.png" class="badge"></a>
-      <a href="http://prototypejs.org/" title="prototype" target="_blank"><img alt="prototype" src="img/prototype.png" class="badge"></a>
-      <br>
-      <a href="http://mootools.net/" title="mootools" target="_blank"><img alt="mootools" src="img/mootools.png" class="badge"></a>
-      <br>
-      <a href="http://vanilla-js.com/" title="Vanilla JS" target="_blank"><img alt="Vanilla JS" src="img/vanilla.png" class="badge"></a>
+    <div id="interval" class="step list" data-x="4000" data-y="-1520" data-z="20" scale="2">
+      <img src="img/person.png" alt="person">
+      <h1>&lang;0,1&rang;</h1>
     </div>
 
-    <div id="historicalworkflow" class="step" data-x="4000" data-y="-2500" style="width: 580px;">
-      <h5>Historická pipeline</h5>
-      <a href="https://www.w3.org/TR/html4/" title="HTML4" target="_blank"><img alt="HTML4" src="img/html.jpg" class="badge small"></a>
-      <img src="img/arrow.png" class="arrow">
-      <a href="http://vanilla-js.com/" title="Vanilla.js" target="_blank"><img alt="Vanilla.js" src="img/vanilla.png" class="badge small"></a>
-      <img src="img/arrow.png" class="arrow">
-      <a href="http://yui.github.io/yuicompressor/" title="YUI Compressor" target="_blank"><img alt="YUI Compressor" src="img/yui.png" class="badge small"></a>
-      <img src="img/arrow.png" class="arrow">
-      <a href="https://en.wikipedia.org/wiki/Internet_Explorer_6" title="IE6" target="_blank"><img alt="IE6" src="img/ie6.png" class="badge small"></a>
-    </div>
-
-    <div id="timelineview" class="step" data-x="4000" data-y="-1520" data-z="20" scale="2">
+    <div id="needs" class="step list" data-x="5500" data-y="-1520" data-z="20" scale="2">
       <ul class="needs">
-        <li>uživatelsky přívětivá</li>
-        <li>vždy trendy vzhled</li>
-        <li>responsivní</li>
-        <li>funguje na mobilních telefonech</li>
-        <li>chová se jako nativní aplikace</li>
-        <li>modulární</li>
-        <li>dobře testovatelná</li>
-        <li>jednoduchá na vývoj</li>
+        <li>škálovatelnost</li>
+        <li>unifikace</li>
+        <li>responsivita</li>
+        <li>progressive enhancement</li>
+        <li>barevná schémata</li>
+        <li>vizuální témata</li>
+        <li>mutace podle jazyků</li>
+        <li>jenoduchá správa</li>
+        <li>jednoduché sdílení</li>
+        <li>cross-browser</li>
       </ul>
     </div>
 
-    <div id="technologies" class="step" data-x="3700" data-y="-200" data-scale="2">
-      <img src="img/hmm.png" alt="hmm" class="hmm">
+     <div id="designsystem" class="step list" data-x="5500" data-y="-800"> 
+       <h1>Design System</h1>
+       <img src="img/designsystem.svg" alt="Design System">
+       <br>
+       <small>hurá proti entropii</small>
+     </div>
+
+    <div id="styleguide" class="step list" data-x="5500" data-y="0">
+      <h1>Style Guide</h1>
+      <img src="img/styleguide.jpg" alt="Design System">
     </div>
 
-    <div id="managers" class="step list" data-x="3000" data-y="-500" style="width: 280px;">
-      <h5>Správci balíčků</h5>
-      <a href="https://www.npmjs.com/" title="npm" target="_blank"><img alt="npm" src="img/npm.svg" class="badge big"></a>
-      <a href="https://yarnpkg.com/" title="Yarn" target="_blank"><img alt="Yarn" src="img/yarn.png" class="badge big"></a>
-      <br>
-      <a href="http://bower.io/" title="Bower" target="_blank"><img alt="Bower" src="img/bower.png" class="badge big"></a>
-      <a href="http://jspm.io/" title="jspm" target="_blank"><img alt="jspm" src="img/jspm.svg" class="badge big"></a>
+    <div id="important" class="step" data-x="7200" data-y="-400" style="width: 300px;">
+      !important
+      <pre><code class="language-css">.my p.blue { color: red; }
+
+...
+
+p.blue { color: blue; }</code></pre>
+<pre><code class="language-html">
+<xmp><div class="my">
+  <p class="blue">text</p>
+</div></xmp>
+</code></pre>
     </div>
 
-    <div id="styleprocessors" class="step list" data-x="3000" data-y="0" style="width: 330px;">
-      <h5>Style processory</h5>
-      <a href="http://the-echoplex.net/csscrush/" title="CSS Crush" target="_blank"><img alt="CSS Crush" src="img/csscrush.svg" class="badge"></a>
-      <a href="http://www.myth.io/" title="Myth" target="_blank"><img alt="Myth" src="img/myth.svg" class="badge"></a>
+    <div id="shame" class="step list" data-x="8200" data-y="-400"style="width: 300px;">
+      shame.css
+      <pre><code class="language-css">
+      p.blue.blue.blue {
+        color: blue;
+      }</code>
+      </pre>
+    </div>
+
+    <div id="optimize" class="step list" data-x="9200" data-y="-400" style="width: 400px;">
+      optimalizace
+      <pre><code class="language-bash">
+       grep -r font-size *.css | wc -l
+       grep -r h[1-6] *.css | wc -l</code>
+
+       #id -> ne
+       div -> ne
+       .bar -> ano
+      </pre>
+    </div>
+
+    <div id="science" class="step list" data-x="9400" data-y="500">
+      <img src="img/computerscience.jpg" alt="Computer Science">
+    </div>
+
+    <div id="problems" class="step list problems" data-x="9400" data-y="500" data-z="-20">
+      pojmenování věcí
       <br>
-      <a href="http://lesscss.org/" title="Less" target="_blank"><img alt="Less" src="img/less.png" class="badge big"></a>
+      vertikální zarovnání
+    </div>
+
+    <div id="bem" class="step list" data-x="10200" data-y="-400" style="width: 800px;">
+      BEM
       <br>
-      <a href="http://sass-lang.com/" title="Sass" target="_blank"><img alt="Sass" src="img/sass.svg" class="badge big"></a>
-      <a href="http://stylus-lang.com/" title="Stylus" target="_blank"><img alt="Stylus" src="img/stylus.png" class="badge big"></a>
+      <a href="https://tech.yandex.com/bem/" title="BEM" target="_blank"><img alt="BEM" src="img/bem.png" class="badge big"></a>
+      <pre><code class="language-css">
+       .ds-button {}
+       .ds-button__icon {}
+       .ds-button--primary {}
+       .ds-button--disabled {}</code>
+      </pre>
+      <pre><code class="language-html">
+      <xmp>
+        <button class="ds-button ds-button--primary ds-button--disabled">
+          <img class="ds-button__icon" src="btn.png" alt="btn">
+        </button>
+      </xmp></code>
+      </pre>
+    </div>
+
+    <div id="smacss" class="step list" data-x="12200" data-y="-400" style="width: 250px;">
+      SMACSS
+      <br>
+      <a href="https://smacss.com/" title="SMACSS" target="_blank"><img alt="SMACSS" src="img/snook.png" class="badge big"></a>
+      <pre><code class="language-css">
+       Base Rules
+       Layout Rules
+       Module Rules
+       State Rules
+       Theme Rules</code>
+      </pre>
+    </div>
+
+    <div id="styleprocessors" class="step list" data-x="13200" data-y="-400" style="width: 330px;">
+      nástroje
+      <br>
+      <a href="http://stylus-lang.com/" title="Stylus" target="_blank"><img alt="Stylus" src="img/stylus.png" class="badge"></a>
+      <a href="http://sass-lang.com/" title="Sass" target="_blank"><img alt="Sass" src="img/sass.svg" class="badge"></a>
       <br>
       <a href="https://github.com/postcss/postcss" title="PostCSS" target="_blank"><img alt="PostCSS" src="img/postcss.svg" class="badge"></a>
       <a href="https://github.com/postcss/autoprefixer" title="AutoPrefixer" target="_blank"><img alt="AutoPrefixer" src="img/autoprefixer.png" class="badge"></a>
-      <br>
-      <a href="https://modernizr.com/" title="Modernizr" target="_blank"><img alt="Modernizr" src="img/modernizr.png" class="badge"></a>
     </div>
 
-    <div id="styleframeworks" class="step list" data-x="3300" data-y="0" style="width: 250px;">
-      <h5>Frameworky pro styly</h5>
-      <a href="http://getbootstrap.com/" title="Bootstrap" target="_blank"><img alt="Bootstrap" src="img/bootstrap.jpg" class="badge"></a>
-      <a href="http://foundation.zurb.com/" title="Zubr Foundation" target="_blank"><img alt="Zubr Foundation" src="img/zubr-foundation.svg" class="badge"></a>
-      <br>
-      <a href="http://compass-style.org/" title="Compass" target="_blank"><img alt="Compass" src="img/compass.png" class="badge"></a>
-      <a href="http://cardinalcss.com/" title="CardinalCSS" target="_blank"><img alt="CardinalCSS" src="img/cardinalcss.png" class="badge"></a>
-      <br>
-      <a href="http://cssreset.com/" title="CSS Reset" target="_blank"><img alt="CSS Reset" src="img/cssreset.gif" class="badge"></a>
+    <div id="tokens1" class="step list" data-x="17200" data-y="-400" style="width: 400px;">
+      design tokeny
+      <h5>color palette</h5>
+      <pre><code class="language-scss">
+       $ds-color__yellow--100: #FC30F;
+       $ds-color__orange--100: #FF5733;
+       $ds-color__red--100:    #C70039;
+</code>
+</pre>
+<h5>fonts</h5>
+<pre><code class="language-scss">
+       $ds-font--small:   12px;
+       $ds-font--default: 14px;
+       $ds-font--big:     16px;
+       </code>
+      </pre>
     </div>
 
-    <div id="modules" class="step list" data-x="3300" data-y="-400" style="width: 250px;">
-      <h5>Správci modulů</h5>
-      <a href="http://stealjs.com/" title="StealJS" target="_blank"><img alt="StealJS" src="img/stealjs.svg" class="badge small"></a>
-      <a href="https://github.com/systemjs/systemjs" title="systemjs" target="_blank"><img alt="systemjs" src="img/systemjs.png" class="badge small"></a>
-      <br>
-      <a href="https://webpack.github.io/" title="webpack" target="_blank"><img alt="webpack" src="img/webpack.svg" class="badge big"></a>
-      <a href="http://requirejs.org/" title="RequireJS" target="_blank"><img alt="RequireJS" src="img/requirejs.png" class="badge big"></a>
-      <br>
-      <a href="http://browserify.org/" title="browserify" target="_blank"><img alt="browserify" src="img/browserify.png" class="badge"></a>
-      <a href="https://rollupjs.org/" title="rollup" target="_blank"><img alt="rollup" src="img/rollup.svg" class="badge"></a>
+    <div id="tokens2" class="step list" data-x="18200" data-y="-400" style="width: 600px;">
+      design tokeny
+      <h5>sizes</h5>
+      <pre><code class="language-scss">
+       $ds-size--s: 8px;
+       $ds-size--m: 16px;
+       $ds-size--l: 24px;
+</code>
+</pre>
+      <h5>sizing</h5>
+      <pre><code class="language-scss">
+       $ds-sizing__innset--small: $ds-size--m $ds-size--s;
+       $ds-sizing__innset--medium: $ds-size--l $ds-size--m;
+       </code>
+      </pre>
     </div>
 
-    <div id="langext" class="step list" data-x="3600" data-y="-400" style="width: 280px;">
-      <h5>Rozšíření jazyka</h5>
-      <a href="https://www.dartlang.org/" title="Dart" target="_blank"><img alt="Dart" src="img/dart.png" class="badge"></a>
-      <a href="http://coffeescript.org/" title="Coffee Script" target="_blank"><img alt="Coffee Script" src="img/coffeescript.png" class="badge"></a>
-      <br>
-      <a href="http://livescript.net/" title="LiveScript" target="_blank"><img alt="LiveScript" src="img/livescript.png" class="badge"></a>
-      <br>
-      <a href="https://www.typescriptlang.org/" title="TypeScript" target="_blank" target="_blank"><img alt="TypeScript" src="img/ts.png" class="badge"></a>
-      <a href="https://facebook.github.io/react/docs/jsx-in-depth.html" title="JSX" target="_blank" target="_blank"><img alt="JSX" src="img/jsx.png" class="badge"></a>
-      <a href="http://asmjs.org/" title="asm.js" target="_blank" target="_blank"><img alt="asm.js" src="img/asmjs.png" class="badge"></a>
-      <br>
-      <a href="https://es5.github.io/" title="ES5" target="_blank" target="_blank"><img alt="ES5" src="img/es5.png" class="badge"></a>
-      <a href="https://nodejs.org/en/docs/es6/" title="ES6" target="_blank" target="_blank"><img alt="ES6" src="img/es6.jpg" class="badge"></a>
-      <a href="http://www.2ality.com/2016/01/ecmascript-2016.html" title="ES7" target="_blank" target="_blank"><img alt="ES7" src="img/es7.png" class="badge"></a>
-      <br>
-      <a href="http://haxe.org/" title="Haxe" target="_blank" target="_blank"><img alt="Haxe" src="img/haxe.png" class="badge"></a>
-      <a href="https://kotlinlang.org/" title="Kotlin" target="_blank" target="_blank"><img alt="Kotlin" src="img/kotlin.png" class="badge"></a>
-      <a href="http://elm-lang.org/" title="Elm" target="_blank" target="_blank"><img alt="Elm" src="img/elm.png" class="badge"></a>
+    <div id="tokens3" class="step list" data-x="20200" data-y="-400" style="width: 800px;">
+      <h5>button base</h5>
+      <pre><code class="language-scss">
+       .ds-button {
+         display: flex;
+       }
+</code></pre>
+      <h5>button Theme</h5>
+      <pre><code class="language-scss">
+       $button-border-style: solid;
+
+       .ds-button {
+         padding: flex;
+         border-width: $ds-size--s;
+         border-style: $button-border-style;
+       }
+</code>
+</pre>
+      <h5>button colorset</h5>
+      <pre><code class="language-scss">
+       $button--primary-color-background: $ds-color__yellow--100;
+       $button--primary-color-border: $ds-color__orange--100;
+
+       .ds-button--primary {
+          background-color: $button--primary-color-background;
+          border-color: $button--primary-color-border;
+       }
+       </code>
+      </pre>
     </div>
 
-    <div id="transpilers" class="step list" data-x="3600" data-y="100" style="width: 340px">
-      <h5>Transpilery</h5>
-      <a href="https://babeljs.io/" title="Babel" target="_blank"><img alt="Babel" src="img/babel.png" class="badge big"></a>
-      <br>
-      <a href="https://github.com/google/traceur-compiler" title="Traceur Compiler" target="_blank"><img alt="Traceur Compiler" src="img/traceur.svg" class="badge big"></a>
-      <a href="https://developers.google.com/closure/compiler/" title="Closure Compiler" target="_blank"><img alt="Closure Compiler" src="img/closurecompiler.png" class="badge big"></a>
+    <div id="result" class="step list" data-x="22200" data-y="-400">
+      <ul>
+        <li>aktuální</li>
+        <li>rozšířitelný</li>
+        <li>přehledný</li>
+      </ul>
     </div>
 
-    <div id="frameworks" class="step list" data-x="3950" data-y="0" style="width: 490px">
-      <h5>Frameworky</h5>
-      <a href="http://cycle.js.org/" title="Cycle.js" target="_blank"><img alt="Cycle.js" src="img/cyclejs.svg" class="badge"></a>
-      <a href="https://vuejs.org/" title="Vue.js" target="_blank"><img alt="Vue.js" src="img/vuejs.png" class="badge"></a>
-      <a href="http://aurelia.io/" title="aurelia.io" target="_blank"><img alt="aurelia.io" src="img/aurelia.png" class="badge"></a>
-      <a href="http://riotjs.com/" title="riot" target="_blank"><img alt="riot" src="img/riot.png" class="badge"></a>
-      <br>
-      <a href="https://angularjs.org/" title="AngularJS" target="_blank"><img alt="AngularJS" src="img/angular.png" class="badge big"></a>
-      <a href="https://facebook.github.io/react/" title="React" target="_blank"><img alt="React" src="img/react.png" class="badge big"></a>
-      <a href="http://emberjs.com/" title="Ember.js" target="_blank"><img alt="Ember.js" src="img/ember.png" class="badge big"></a>
-      <a href="https://github.com/reactjs/redux" title="Redux" target="_blank" target="_blank"><img alt="Redux" src="img/redux.png" class="badge big"></a>
-      <br>
-      <a href="http://backbonejs.org/" title="backbone.js" target="_blank"><img alt="backbone.js" src="img/backbone.svg" class="badge"></a>
-      <a href="https://www.meteor.com/" title="meteor" target="_blank"><img alt="meteor" src="img/meteor.png" class="badge"></a>
-      <a href="https://www.polymer-project.org/1.0/" title="polymer" target="_blank"><img alt="polymer" src="img/polymer.png" class="badge"></a>
-      <a href="https://www.sencha.com/products/extjs/" title="Ext JS" target="_blank"><img alt="Ext JS" src="img/extjs.png" class="badge"></a>
-      <br>
-      <a href="https://canjs.com/" title="CanJS" target="_blank"><img alt="CanJS" src="img/canjs.png" class="badge small"></a>
-      <a href="http://spine.github.io/" title="SpineJS" target="_blank"><img alt="SpineJS" src="img/spine.png" class="badge small"></a>
-      <br>
-      <a href="http://knockoutjs.com/" title="knockout" target="_blank"><img alt="knockout" src="img/knockout.png" class="badge small"></a>
-    </div>
-
-    <div id="latestframework" class="step list" data-x="3950" data-y="300" data-rotate-x="-30" style="width: 550px">
-      <a id="latestframeworka" href="https://dayssincelastjavascriptframework.com/" target="_blank">nejnovější framework?</a>
-    </div>
-
-    <div id="platform" class="step list" data-x="3950" data-y="-500" style="width: 280px;">
-      <h5>Platformy</h5>
-      <a href="https://www.xamarin.com/" title="Xamarin" target="_blank"><img alt="Xamarin" src="img/xamarin.svg" class="badge"></a>
-      <a href="https://cordova.apache.org/" title="Cordova" target="_blank"><img alt="Cordova" src="img/cordova.png" class="badge"></a>
-      <a href="http://ionicframework.com/" title="ionic" target="_blank"><img alt="ionic" src="img/ionic.png" class="badge"></a>
-      <br>
-      <a href="https://facebook.github.io/react-native/" title="React Native" target="_blank"><img alt="React Native" src="img/reactnative.png" class="badge big"></a>
-      <br>
-      <a href="http://electron.atom.io/" title="Electron" target="_blank"><img alt="Electron" src="img/electron.png" class="badge"></a>
-      <a href="https://www.nativescript.org/" title="NativeScript" target="_blank"><img alt="NativeScript" src="img/nativescript.jpeg" class="badge"></a>
-    </div>
-
-    <div id="libraries" class="step list" data-x="4250" data-y="-400" style="width: 260px;">
-      <h5>Knihovny</h5>
-      <a href="http://reactivex.io/" title="RxJS" target="_blank"><img alt="RxJS" src="img/rx.png" class="badge"></a>
-      <a href="https://lodash.com/" title="lodash" target="_blank"><img alt="lodash" src="img/lodash.png" class="badge"></a>
-      <a href="https://pouchdb.com/" title="PouchDB" target="_blank"><img alt="PouchDB" src="img/pouchdb.png" class="badge"></a>
-      <br>
-      <a href="http://dmitrybaranovskiy.github.io/raphael/" title="Raphael" target="_blank"><img alt="Raphael" src="img/raphaeljs.png" class="badge"></a>
-      <a href="https://d3js.org/" title="D3" target="_blank"><img alt="D3" src="img/d3.svg" class="badge"></a>
-      <a href="http://www.telerik.com/kendo-ui" title="Kendo UI" target="_blank"><img alt="Kendo UI" src="img/kendoui.png" class="badge"></a>
-      <br>
-      <a href="http://momentjs.com/" title="Moment" target="_blank"><img alt="Moment" src="img/moment.png" class="badge"></a>
-      <a href="http://socket.io/" title="socket.io" target="_blank"><img alt="socket.io" src="img/socketio.gif" class="badge"></a>
-      <br>
-      <a href="http://www.babylonjs.com/" title="Babylon" target="_blank"><img alt="Babylon" src="img/babylon.svg" class="badge"></a>
-    </div>
-
-    <div id="checkers" class="step list" data-x="4330" data-y="80" style="width: 260px;">
-      <h5>Kontroly</h5>
-      <a href="http://jscs.info/" title="JSCS" target="_blank"><img alt="JSCS" src="img/jscs.png" class="badge big"></a>
-      <a href="http://eslint.org/" title="ESLint" target="_blank"><img alt="ESLint" src="img/eslint.svg" class="badge big"></a>
-      <br>
-      <a href="http://jshint.com/" title="JSHint" target="_blank"><img alt="JSHint" src="img/jshint.png" class="badge"></a>
-      <a href="https://palantir.github.io/tslint/" title="TSLint" target="_blank"><img alt="TSLint" src="img/tslint.png" class="badge small"></a>
-      <br>
-      <a href="http://www.jslint.com/" title="JSLint" target="_blank"><img alt="JSLint" src="img/jslint.png" class="badge small"></a>
-      <a href="http://flowtype.org/" title="Flow" target="_blank" target="_blank"><img alt="Flow" src="img/flow.png" class="badge"></a>
-    </div>
-
-    <div id="testing" class="step list" data-x="4600" data-y="70" style="width: 350px;">
-      <h5>Testovací nástroje</h5>
-      <a href="http://phantomjs.org/" title="PhantomJS" target="_blank"><img alt="PhantomJS" src="img/phantomjs.png" class="badge"></a>
-      <a href="https://karma-runner.github.io/0.13/index.html" title="Karma" target="_blank"><img alt="Karma JS" src="img/karma.png" class="badge"></a>
-      <a href="http://docs.seleniumhq.org/" title="Selenium" target="_blank"><img alt="Selenium" src="img/selenium.png" class="badge"></a>
-      <a href="https://www.browsersync.io/" title="BrowserSync" target="_blank"><img alt="BrowserSync" src="img/browsersync.png" class="badge"></a>
-      <br>
-      <a href="http://jasmine.github.io/" title="Jasmine" target="_blank"><img alt="Jasmine" src="img/jasmine.png" class="badge"></a>
-      <a href="https://mochajs.org/" title="Mocha" target="_blank"><img alt="Mocha" src="img/mocha.png" class="badge"></a>
-      <a href="http://chaijs.com/" title="Chai" target="_blank"><img alt="Chai" src="img/chai.png" class="badge"></a>
-      <a href="http://angular.github.io/protractor/" title="Protractor" target="_blank"><img alt="Protractor" src="img/protractor.png" class="badge"></a>
-      <br>
-      <a href="https://facebook.github.io/jest/" title="Jest" target="_blank"><img alt="Jest" src="img/jest.png" class="badge"></a>
-      <a href="http://sinonjs.org/" title="Sinon JS" target="_blank"><img alt="Sinon JS" src="img/sinonjs.png" class="badge"></a>
-    </div>
-
-    <div id="pipeline" class="step list" data-x="4450" data-y="-300" style="width: 200px;">
-      <h5>Správci pipeline</h5>
-      <a href="http://gruntjs.com/" title="Grunt" target="_blank"><img alt="Grunt" src="img/grunt.png" class="badge big"></a>
-      <a href="http://gulpjs.com/" title="Gulp" target="_blank"><img alt="Gulp" src="img/gulp.png" class="badge big"></a>
-      <br>
-      <a href="https://www.npmjs.com/" title="npm" target="_blank"><img alt="npm" src="img/npm.svg" class="badge small"></a>
-      <br>
-      <a href="http://broccolijs.com/" title="Broccoli.js" target="_blank"><img alt="Broccoli.js" src="img/broccoli.png" class="badge"></a>
-    </div>
-
-    <div id="devhelp" class="step list" data-x="4650" data-y="-200" style="width: 220px;">
-      <h5>Vývojové nástroje</h5>
-      <a href="http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/" title="Source Maps" target="_blank"><img alt="Source Maps" src="img/sourcemaps.png" class="badge"></a>
-      <a href="http://livereload.com/" title="LiveReload" target="_blank"><img alt="LiveReload" src="img/livereload.png" class="badge"></a>
-    </div>
-
-    <div id="services" class="step list" data-x="4650" data-y="-520" style="width: 210px;">
-      <h5>Servisy</h5>
-      <a href="https://saucelabs.com/" title="SauceLabs" target="_blank"><img alt="SauceLabs" src="img/saucelabs.png" class="badge"></a>
-      <br>
-      <a href="https://www.rainforestqa.com/" title="Rainforest QA" target="_blank"><img alt="Rainforest QA" src="img/rainforest.png" class="badge"></a>
-      <br>
-      <a href="https://www.browserstack.com/" title="BrowserStack" target="_blank"><img alt="BrowserStack" src="img/browserstack.png" class="badge"></a>
-      <a href="https://travis-ci.org/" title="Travis CI" target="_blank"><img alt="Travis CI" src="img/travis.png" class="badge"></a>
-      <br>
-      <a href="https://about.gitlab.com/" title="GitLab" target="_blank"><img alt="GitLab" src="img/gitlab.png" class="badge"></a>
-      <a href="https://github.com/" title="GitHub" target="_blank"><img alt="GitHub" src="img/github.png" class="badge"></a>
-    </div>
-
-    <div id="webdevelopment" class="step" data-x="6000" data-y="-200">
-      <img src="img/webdev.jpg">
-      <img id="angry" class="angry">
-    </div>
-
-    <div id="scafolding" class="step list" data-x="7200" data-y="-200" style="width: 300px;">
-      <h5>Scafolding</h5>
-      <a href="http://yeoman.io/" title="Yeoman" target="_blank"><img alt="Yeoman" src="img/yeoman.png" class="badge big"></a>
-      <a href="http://slushjs.github.io/" title="Slush" target="_blank"><img alt="Slush" src="img/slush.png" class="badge big"></a>
-      <a href="https://github.com/search?l=JavaScript&o=desc&q=boilerplate&s=stars&type=Repositories" title="Boilerplate" target="_blank"><img alt="Boilerplate" src="img/boilerplate.png" class="badge"></a>
-    </div>
-
-    <div id="examplepipelinesboilerplate" class="step examplepipelines" data-x="8800" data-y="-200">
-      <h5>PIPELINY</h5>
-      <div class="react-redux-universal-hot-example">
-        <a href="https://github.com/erikras/react-redux-universal-hot-example" class="pipeline" title="react-redux-universal-hot-example" target="_blank">react-redux-universal-hot-example:</a>
-        <br>
-        <a href="https://github.com/search?l=JavaScript&o=desc&q=boilerplate&s=stars&type=Repositories" title="Boilerplate" target="_blank"><img alt="Boilerplate" src="img/boilerplate.png" class="badge small"></a>
-        <img src="img/arrow.png" class="arrow">
-        <a href="https://www.npmjs.com/" title="npm" target="_blank"><img alt="npm" src="img/npm.svg" class="badge small"></a>
-        <img src="img/arrow.png" class="arrow">
-        <a href="https://facebook.github.io/react/" title="React" target="_blank"><img alt="React" src="img/react.png" class="badge small"></a>
-        <a href="https://github.com/reactjs/redux" title="Redux" target="_blank" target="_blank"><img alt="Redux" src="img/redux.png" class="badge small"></a>
-        <img src="img/arrow.png" class="arrow">
-        <a href="http://www.2ality.com/2016/01/ecmascript-2016.html" title="ES7" target="_blank" target="_blank"><img alt="ES7" src="img/es7.png" class="badge small"></a>
-        <a href="https://babeljs.io/" title="Babel" target="_blank"><img alt="Babel" src="img/babel.png" class="badge small"></a>
-        <a href="https://webpack.github.io/" title="webpack" target="_blank"><img alt="webpack" src="img/webpack.svg" class="badge small"></a>
-        <img src="img/arrow.png" class="arrow">
-        <a href="http://eslint.org/" title="ESLint" target="_blank"><img alt="ESLint" src="img/eslint.svg" class="badge small"></a>
-        <a href="https://mochajs.org/" title="Mocha" target="_blank"><img alt="Mocha" src="img/mocha.png" class="badge small"></a>
-      </div>
-      <div class="react-typescript-boilerplate">
-        <a href="https://github.com/keokilee/react-typescript-boilerplate" class="pipeline" title="react-typescript-boilerplate" target="_blank">react-typescript-boilerplate:</a>
-        <br>
-        <a href="https://github.com/search?l=JavaScript&o=desc&q=boilerplate&s=stars&type=Repositories" title="Boilerplate" target="_blank"><img alt="Boilerplate" src="img/boilerplate.png" class="badge small"></a>
-        <img src="img/arrow.png" class="arrow">
-        <a href="https://www.npmjs.com/" title="npm" target="_blank"><img alt="npm" src="img/npm.svg" class="badge small"></a>
-        <img src="img/arrow.png" class="arrow">
-        <a href="https://www.typescriptlang.org/" title="TypeScript" target="_blank" target="_blank"><img alt="TypeScript" src="img/ts.png" class="badge small"></a>
-        <a href="https://facebook.github.io/react/" title="React" target="_blank"><img alt="React" src="img/react.png" class="badge small"></a>
-        <img src="img/arrow.png" class="arrow">
-        <a href="https://babeljs.io/" title="Babel" target="_blank"><img alt="Babel" src="img/babel.png" class="badge small"></a>
-        <a href="https://webpack.github.io/" title="webpack" target="_blank"><img alt="webpack" src="img/webpack.svg" class="badge small"></a>
-        <img src="img/arrow.png" class="arrow">
-        <a href="https://palantir.github.io/tslint/" title="TSLint" target="_blank"><img alt="TSLint" src="img/tslint.png" class="badge small"></a>
-      </div>
-    </div>
-
-    <div id="examplepipelinesscafolding" class="step examplepipelines" data-x="10800" data-y="-200">
-      <div class="react-gulp">
-        <a href="https://github.com/randylien/generator-react-gulp-browserify" class="pipeline" title="generator-react-gulp-browserify" target="_blank">generator-react-gulp-browserify:</a>
-        <br>
-        <div class="packages">
-          <a href="http://yeoman.io/" title="Yeoman" target="_blank"><img alt="Yeoman" src="img/yeoman.png" class="badge small"></a>
-          <img src="img/arrow.png" class="arrow">
-          <a href="https://www.npmjs.com/" title="npm" target="_blank"><img alt="npm" src="img/npm.svg" class="badge small"></a>
-          <a href="http://bower.io/" title="Bower" target="_blank"><img alt="Bower" src="img/bower.png" class="badge small"></a>
-          <img src="img/arrow.png" class="arrow">
-        </div>
-        <a href="http://coffeescript.org/" title="Coffee Script" target="_blank"><img alt="Coffee Script" src="img/coffeescript.png" class="badge small"></a>
-        <a href="https://facebook.github.io/react/" title="React" target="_blank"><img alt="React" src="img/react.png" class="badge small"></a>
-        <a href="https://jquery.com/" title="jQuery" target="_blank"><img alt="jQuery" src="img/jquery.png" class="badge small"></a>
-        <div class="end">
-          <img src="img/arrow.png" class="arrow"> ...
-        </div>
-        <br>
-        <div class="styles">
-          <a href="http://sass-lang.com/" title="Sass" target="_blank"><img alt="Sass" src="img/sass.svg" class="badge small"></a>
-          <a href="http://compass-style.org/" title="Compass" target="_blank"><img alt="Compass" src="img/compass.png" class="badge small"></a>
-          <a href="http://getbootstrap.com/" title="Bootstrap" target="_blank"><img alt="Bootstrap" src="img/bootstrap.jpg" class="badge small"></a>
-        </div>
-        <br>
-        <br>
-        <div>
-          ... <img src="img/arrow.png" class="arrow">
-          <a href="http://gulpjs.com/" title="Gulp" target="_blank"><img alt="Gulp" src="img/gulp.png" class="badge small"></a>
-          <a href="http://browserify.org/" title="browserify" target="_blank"><img alt="browserify" src="img/browserify.png" class="badge small"></a>
-          <img src="img/arrow.png" class="arrow">
-          <a href="http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/" title="Source Maps" target="_blank"><img alt="Source Maps" src="img/sourcemaps.png" class="badge small"></a>
-          <a href="https://www.browsersync.io/" title="BrowserSync" target="_blank"><img alt="BrowserSync" src="img/browsersync.png" class="badge small"></a>
-          <a href="https://modernizr.com/" title="Modernizr" target="_blank"><img alt="Modernizr" src="img/modernizr.png" class="badge small"></a>
-          <img src="img/arrow.png" class="arrow">
-          <a href="https://mochajs.org/" title="Mocha" target="_blank"><img alt="Mocha" src="img/mocha.png" class="badge small"></a>
-          <a href="https://facebook.github.io/jest/" title="Jest" target="_blank"><img alt="Jest" src="img/jest.png" class="badge small"></a>
-          <img src="img/arrow.png" class="arrow">
-          <a href="https://travis-ci.org/" title="Travis CI" target="_blank"><img alt="Travis CI" src="img/travis.png" class="badge small"></a>
-        </div>
-      </div>
-      <div class="slush-meanjs">
-        <a href="https://www.npmjs.com/package/slush-meanjs" class="pipeline" title="slush-meanjs" target="_blank">slush-meanjs:</a>
-        <br>
-        <div class="packages">
-          <a href="http://slushjs.github.io/" title="Slush" target="_blank"><img alt="Slush" src="img/slush.png" class="badge small"></a>
-          <img src="img/arrow.png" class="arrow">
-          <a href="https://www.npmjs.com/" title="npm" target="_blank"><img alt="npm" src="img/npm.svg" class="badge small"></a>
-          <a href="http://bower.io/" title="Bower" target="_blank"><img alt="Bower" src="img/bower.png" class="badge small"></a>
-          <img src="img/arrow.png" class="arrow">
-        </div>
-        <div class="lang">
-          <a href="https://angularjs.org/" title="AngularJS" target="_blank"><img alt="AngularJS" src="img/angular.png" class="badge small"></a>
-          <a href="https://lodash.com/" title="lodash" target="_blank"><img alt="lodash" src="img/lodash.png" class="badge small"></a>
-        </div>
-        <div class="endarrow">
-          <img src="img/arrow.png" class="arrow"> ...
-        </div>
-        <br>
-        <div class="styles">
-          <a href="http://lesscss.org/" title="Less" target="_blank"><img alt="Less" src="img/less.png" class="badge small"></a>
-          <a href="http://sass-lang.com/" title="Sass" target="_blank"><img alt="Sass" src="img/sass.svg" class="badge small"></a>
-          <a href="https://github.com/postcss/postcss" title="PostCSS" target="_blank"><img alt="PostCSS" src="img/postcss.svg" class="badge small"></a>
-          <a href="https://github.com/postcss/autoprefixer" title="AutoPrefixer" target="_blank"><img alt="AutoPrefixer" src="img/autoprefixer.png" class="badge small"></a>
-          <br>
-        </div>
-        <br>
-        <br>
-        <div>
-          ... <img src="img/arrow.png" class="arrow">
-          <a href="http://gulpjs.com/" title="Gulp" target="_blank"><img alt="Gulp" src="img/gulp.png" class="badge small"></a>
-          <a href="http://gruntjs.com/" title="Grunt" target="_blank"><img alt="Grunt" src="img/grunt.png" class="badge small"></a>
-          <img src="img/arrow.png" class="arrow">
-          <a href="http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/" title="Source Maps" target="_blank"><img alt="Source Maps" src="img/sourcemaps.png" class="badge small"></a>
-          <a href="http://livereload.com/" title="LiveReload" target="_blank"><img alt="LiveReload" src="img/livereload.png" class="badge small"></a>
-          <img src="img/arrow.png" class="arrow">
-          <a href="https://mochajs.org/" title="Mocha" target="_blank"><img alt="Mocha" src="img/mocha.png" class="badge small"></a>
-          <a href="http://jasmine.github.io/" title="Jasmine" target="_blank"><img alt="Jasmine" src="img/jasmine.png" class="badge small"></a>
-          <a href="http://phantomjs.org/" title="PhantomJS" target="_blank"><img alt="PhantomJS" src="img/phantomjs.png" class="badge small"></a>
-          <a href="https://karma-runner.github.io/0.13/index.html" title="Karma" target="_blank"><img alt="Karma JS" src="img/karma.png" class="badge small"></a>
-          <a href="http://angular.github.io/protractor/" title="Protractor" target="_blank"><img alt="Protractor" src="img/protractor.png" class="badge small"></a>
-          <a href="http://eslint.org/" title="ESLint" target="_blank"><img alt="ESLint" src="img/eslint.svg" class="badge small"></a>
-          <img src="img/arrow.png" class="arrow">
-          <a href="https://travis-ci.org/" title="Travis CI" target="_blank"><img alt="Travis CI" src="img/travis.png" class="badge small"></a>
-        </div>
-      </div>
-    </div>
-
-    <div id="what" class="step what list" data-x="12400" data-y="-200">
-      <img src="img/what.jpg" class="what">
-    </div>
-
-    <div id="libraries-small" class="step libraries list" data-x="14400" data-y="-200">
-      <h1>Malý projekt</h1>
-      <a href="http://vanilla-js.com/" title="Vanilla JS" target="_blank"><img alt="Vanilla JS" src="img/vanilla.png" class="badge"></a>
-      <a href="http://lesscss.org/" title="Less" target="_blank"><img alt="Less" src="img/less.png" class="badge"></a>
-      <br>
-      <a href="http://bower.io/" title="Bower" target="_blank"><img alt="Bower" src="img/bower.png" class="badge big"></a>
-      <br>
-      <a href="https://jquery.com/" title="jQuery" target="_blank"><img alt="jQuery" src="img/jquery.png" class="badge big"></a>
-      <a href="https://lodash.com/" title="lodash" target="_blank"><img alt="lodash" src="img/lodash.png" class="badge"></a>
-    </div>
-
-    <div id="libraries-medium" class="step libraries list" data-x="16400" data-y="-200">
-      <h1>Aplikace</h1>
-      <a href="https://yarnpkg.com/" title="Yarn" target="_blank"><img alt="Yarn" src="img/yarn.png" class="badge"></a>
-      <br>
-      <a href="https://angularjs.org/" title="AngularJS" target="_blank"><img alt="AngularJS" src="img/angular.png" class="badge"></a>
-      <a href="https://facebook.github.io/react/" title="React" target="_blank"><img alt="React" src="img/react.png" class="badge"></a>
-      <a href="http://emberjs.com/" title="Ember.js" target="_blank"><img alt="Ember.js" src="img/ember.png" class="badge"></a>
-      <br>
-      <a href="https://github.com/reactjs/redux" title="Redux" target="_blank" target="_blank"><img alt="Redux" src="img/redux.png" class="badge"></a>
-      <a href="https://mobx.js.org/" title="MobX" target="_blank" target="_blank"><img alt="MobX" src="img/mobx.png" class="badge"></a>
-      <a href="http://reactivex.io/" title="RxJS" target="_blank"><img alt="RxJS" src="img/rx.png" class="badge"></a>
-      <br>
-      <a href="http://sass-lang.com/" title="Sass" target="_blank"><img alt="Sass" src="img/sass.svg" class="badge"></a>
-      <a href="https://webpack.github.io/" title="webpack" target="_blank"><img alt="webpack" src="img/webpack.svg" class="badge"></a>
-    </div>
-
-    <div id="libraries-enterprise" class="step libraries list" data-x="18400" data-y="-200">
-      <h1>Enterprise aplikace</h1>
-      <a href="http://vanilla-js.com/" title="Vanilla JS" target="_blank"><img alt="Vanilla JS" src="img/vanilla.png" class="badge big"></a>
-      <a href="http://sass-lang.com/" title="Sass" target="_blank"><img alt="Sass" src="img/sass.svg" class="badge big"></a>
-      <br>
-      <a href="http://reactivex.io/" title="RxJS" target="_blank"><img alt="RxJS" src="img/rx.png" class="badge big"></a>
-      <br>
-      <a href="https://yarnpkg.com/" title="Yarn" target="_blank"><img alt="Yarn" src="img/yarn.png" class="badge big"></a>
-      <a href="https://webpack.github.io/" title="webpack" target="_blank"><img alt="webpack" src="img/webpack.svg" class="badge big"></a>
-    </div>
-
-    <div id="thankyou" class="step thankyou" data-x="20400" data-y="-200">
+    <div id="thankyou" class="step thankyou" data-x="24400" data-y="-400">
       <h1>DÍKY</h1>
     </div>
 </div>
@@ -647,5 +353,352 @@ function toggleFullScreen() {
     }
   }
 }
+</script>
+<script>
+
+  var table = [
+    "H", "Hydrogen", "1.00794", 1, 1,
+    "He", "Helium", "4.002602", 18, 1,
+    "Li", "Lithium", "6.941", 1, 2,
+    "Be", "Beryllium", "9.012182", 2, 2,
+    "B", "Boron", "10.811", 13, 2,
+    "C", "Carbon", "12.0107", 14, 2,
+    "N", "Nitrogen", "14.0067", 15, 2,
+    "O", "Oxygen", "15.9994", 16, 2,
+    "F", "Fluorine", "18.9984032", 17, 2,
+    "Ne", "Neon", "20.1797", 18, 2,
+    "Na", "Sodium", "22.98976...", 1, 3,
+    "Mg", "Magnesium", "24.305", 2, 3,
+    "Al", "Aluminium", "26.9815386", 13, 3,
+    "Si", "Silicon", "28.0855", 14, 3,
+    "P", "Phosphorus", "30.973762", 15, 3,
+    "S", "Sulfur", "32.065", 16, 3,
+    "Cl", "Chlorine", "35.453", 17, 3,
+    "Ar", "Argon", "39.948", 18, 3,
+    "K", "Potassium", "39.948", 1, 4,
+    "Ca", "Calcium", "40.078", 2, 4,
+    "Sc", "Scandium", "44.955912", 3, 4,
+    "Ti", "Titanium", "47.867", 4, 4,
+    "V", "Vanadium", "50.9415", 5, 4,
+    "Cr", "Chromium", "51.9961", 6, 4,
+    "Mn", "Manganese", "54.938045", 7, 4,
+    "Fe", "Iron", "55.845", 8, 4,
+    "Co", "Cobalt", "58.933195", 9, 4,
+    "Ni", "Nickel", "58.6934", 10, 4,
+    "Cu", "Copper", "63.546", 11, 4,
+    "Zn", "Zinc", "65.38", 12, 4,
+    "Ga", "Gallium", "69.723", 13, 4,
+    "Ge", "Germanium", "72.63", 14, 4,
+    "As", "Arsenic", "74.9216", 15, 4,
+    "Se", "Selenium", "78.96", 16, 4,
+    "Br", "Bromine", "79.904", 17, 4,
+    "Kr", "Krypton", "83.798", 18, 4,
+    "Rb", "Rubidium", "85.4678", 1, 5,
+    "Sr", "Strontium", "87.62", 2, 5,
+    "Y", "Yttrium", "88.90585", 3, 5,
+    "Zr", "Zirconium", "91.224", 4, 5,
+    "Nb", "Niobium", "92.90628", 5, 5,
+    "Mo", "Molybdenum", "95.96", 6, 5,
+    "Tc", "Technetium", "(98)", 7, 5,
+    "Ru", "Ruthenium", "101.07", 8, 5,
+    "Rh", "Rhodium", "102.9055", 9, 5,
+    "Pd", "Palladium", "106.42", 10, 5,
+    "Ag", "Silver", "107.8682", 11, 5,
+    "Cd", "Cadmium", "112.411", 12, 5,
+    "In", "Indium", "114.818", 13, 5,
+    "Sn", "Tin", "118.71", 14, 5,
+    "Sb", "Antimony", "121.76", 15, 5,
+    "Te", "Tellurium", "127.6", 16, 5,
+    "I", "Iodine", "126.90447", 17, 5,
+    "Xe", "Xenon", "131.293", 18, 5,
+    "Cs", "Caesium", "132.9054", 1, 6,
+    "Ba", "Barium", "132.9054", 2, 6,
+    "La", "Lanthanum", "138.90547", 4, 9,
+    "Ce", "Cerium", "140.116", 5, 9,
+    "Pr", "Praseodymium", "140.90765", 6, 9,
+    "Nd", "Neodymium", "144.242", 7, 9,
+    "Pm", "Promethium", "(145)", 8, 9,
+    "Sm", "Samarium", "150.36", 9, 9,
+    "Eu", "Europium", "151.964", 10, 9,
+    "Gd", "Gadolinium", "157.25", 11, 9,
+    "Tb", "Terbium", "158.92535", 12, 9,
+    "Dy", "Dysprosium", "162.5", 13, 9,
+    "Ho", "Holmium", "164.93032", 14, 9,
+    "Er", "Erbium", "167.259", 15, 9,
+    "Tm", "Thulium", "168.93421", 16, 9,
+    "Yb", "Ytterbium", "173.054", 17, 9,
+    "Lu", "Lutetium", "174.9668", 18, 9,
+    "Hf", "Hafnium", "178.49", 4, 6,
+    "Ta", "Tantalum", "180.94788", 5, 6,
+    "W", "Tungsten", "183.84", 6, 6,
+    "Re", "Rhenium", "186.207", 7, 6,
+    "Os", "Osmium", "190.23", 8, 6,
+    "Ir", "Iridium", "192.217", 9, 6,
+    "Pt", "Platinum", "195.084", 10, 6,
+    "Au", "Gold", "196.966569", 11, 6,
+    "Hg", "Mercury", "200.59", 12, 6,
+    "Tl", "Thallium", "204.3833", 13, 6,
+    "Pb", "Lead", "207.2", 14, 6,
+    "Bi", "Bismuth", "208.9804", 15, 6,
+    "Po", "Polonium", "(209)", 16, 6,
+    "At", "Astatine", "(210)", 17, 6,
+    "Rn", "Radon", "(222)", 18, 6,
+    "Fr", "Francium", "(223)", 1, 7,
+    "Ra", "Radium", "(226)", 2, 7,
+    "Ac", "Actinium", "(227)", 4, 10,
+    "Th", "Thorium", "232.03806", 5, 10,
+    "Pa", "Protactinium", "231.0588", 6, 10,
+    "U", "Uranium", "238.02891", 7, 10,
+    "Np", "Neptunium", "(237)", 8, 10,
+    "Pu", "Plutonium", "(244)", 9, 10,
+    "Am", "Americium", "(243)", 10, 10,
+    "Cm", "Curium", "(247)", 11, 10,
+    "Bk", "Berkelium", "(247)", 12, 10,
+    "Cf", "Californium", "(251)", 13, 10,
+    "Es", "Einstenium", "(252)", 14, 10,
+    "Fm", "Fermium", "(257)", 15, 10,
+    "Md", "Mendelevium", "(258)", 16, 10,
+    "No", "Nobelium", "(259)", 17, 10,
+    "Lr", "Lawrencium", "(262)", 18, 10,
+    "Rf", "Rutherfordium", "(267)", 4, 7,
+    "Db", "Dubnium", "(268)", 5, 7,
+    "Sg", "Seaborgium", "(271)", 6, 7,
+    "Bh", "Bohrium", "(272)", 7, 7,
+    "Hs", "Hassium", "(270)", 8, 7,
+    "Mt", "Meitnerium", "(276)", 9, 7,
+    "Ds", "Darmstadium", "(281)", 10, 7,
+    "Rg", "Roentgenium", "(280)", 11, 7,
+    "Cn", "Copernicium", "(285)", 12, 7,
+    "Uut", "Unutrium", "(284)", 13, 7,
+    "Fl", "Flerovium", "(289)", 14, 7,
+    "Uup", "Ununpentium", "(288)", 15, 7,
+    "Lv", "Livermorium", "(293)", 16, 7,
+    "Uus", "Ununseptium", "(294)", 17, 7,
+    "Uuo", "Ununoctium", "(294)", 18, 7
+  ];
+
+  var camera, scene, renderer;
+  var controls;
+
+  var objects = [];
+  var targets = { table: [], sphere: [], helix: [], grid: [] };
+
+  init();
+  animate();
+
+  function init() {
+
+    camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.position.z = 3000;
+
+    scene = new THREE.Scene();
+
+    // table
+
+    for (var i = 0; i < table.length; i += 5) {
+
+      var element = document.createElement('div');
+      element.className = 'element';
+      element.style.backgroundColor = 'rgba(0,127,127,' + (Math.random() * 0.5 + 0.25) + ')';
+
+      var number = document.createElement('div');
+      number.className = 'number';
+      number.textContent = (i / 5) + 1;
+      element.appendChild(number);
+
+      var symbol = document.createElement('div');
+      symbol.className = 'symbol';
+      symbol.textContent = table[i];
+      element.appendChild(symbol);
+
+      var details = document.createElement('div');
+      details.className = 'details';
+      details.innerHTML = table[i + 1] + '<br>' + table[i + 2];
+      element.appendChild(details);
+
+      var object = new THREE.CSS3DObject(element);
+      object.position.x = Math.random() * 4000 - 2000;
+      object.position.y = Math.random() * 4000 - 2000;
+      object.position.z = Math.random() * 4000 - 2000;
+      scene.add(object);
+
+      objects.push(object);
+
+      //
+
+      var object = new THREE.Object3D();
+      object.position.x = (table[i + 3] * 140) - 1260;
+      object.position.y = - (table[i + 4] * 180) + 990;
+
+      targets.table.push(object);
+
+    }
+
+    // sphere
+
+    var vector = new THREE.Vector3();
+
+    for (var i = 0, l = objects.length; i < l; i++) {
+
+      var phi = Math.acos(-1 + (2 * i) / l);
+      var theta = Math.sqrt(l * Math.PI) * phi;
+
+      var object = new THREE.Object3D();
+
+      object.position.x = 800 * Math.cos(theta) * Math.sin(phi);
+      object.position.y = 800 * Math.sin(theta) * Math.sin(phi);
+      object.position.z = 800 * Math.cos(phi);
+
+      vector.copy(object.position).multiplyScalar(2);
+
+      object.lookAt(vector);
+
+      targets.sphere.push(object);
+
+    }
+
+    // helix
+
+    var vector = new THREE.Vector3();
+
+    for (var i = 0, l = objects.length; i < l; i++) {
+
+      var phi = i * 0.175 + Math.PI;
+
+      var object = new THREE.Object3D();
+
+      object.position.x = 900 * Math.sin(phi);
+      object.position.y = - (i * 8) + 450;
+      object.position.z = 900 * Math.cos(phi);
+
+      vector.x = object.position.x * 2;
+      vector.y = object.position.y;
+      vector.z = object.position.z * 2;
+
+      object.lookAt(vector);
+
+      targets.helix.push(object);
+
+    }
+
+    // grid
+
+    for (var i = 0; i < objects.length; i++) {
+
+      var object = new THREE.Object3D();
+
+      object.position.x = ((i % 5) * 400) - 800;
+      object.position.y = (- (Math.floor(i / 5) % 5) * 400) + 800;
+      object.position.z = (Math.floor(i / 25)) * 1000 - 2000;
+
+      targets.grid.push(object);
+
+    }
+
+    //
+
+    renderer = new THREE.CSS3DRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.domElement.style.position = 'absolute';
+    document.getElementById('container').appendChild(renderer.domElement);
+
+    //
+
+    controls = new THREE.TrackballControls(camera, renderer.domElement);
+    controls.rotateSpeed = 0.5;
+    controls.minDistance = 500;
+    controls.maxDistance = 6000;
+    controls.addEventListener('change', render);
+
+    var button = document.getElementById('table');
+    button.addEventListener('click', function (event) {
+
+      transform(targets.table, 2000);
+
+    }, false);
+
+    var button = document.getElementById('sphere');
+    button.addEventListener('click', function (event) {
+
+      transform(targets.sphere, 2000);
+
+    }, false);
+
+    var button = document.getElementById('helix');
+    button.addEventListener('click', function (event) {
+
+      transform(targets.helix, 2000);
+
+    }, false);
+
+    var button = document.getElementById('grid');
+    button.addEventListener('click', function (event) {
+
+      transform(targets.grid, 2000);
+
+    }, false);
+
+    transform(targets.grid, 2000);
+
+    //
+
+    window.addEventListener('resize', onWindowResize, false);
+
+  }
+
+  function transform(targets, duration) {
+
+    TWEEN.removeAll();
+
+    for (var i = 0; i < objects.length; i++) {
+
+      var object = objects[i];
+      var target = targets[i];
+
+      new TWEEN.Tween(object.position)
+        .to({ x: target.position.x, y: target.position.y, z: target.position.z }, Math.random() * duration + duration)
+        .easing(TWEEN.Easing.Exponential.InOut)
+        .start();
+
+      new TWEEN.Tween(object.rotation)
+        .to({ x: target.rotation.x, y: target.rotation.y, z: target.rotation.z }, Math.random() * duration + duration)
+        .easing(TWEEN.Easing.Exponential.InOut)
+        .start();
+
+    }
+
+    new TWEEN.Tween(this)
+      .to({}, duration * 2)
+      .onUpdate(render)
+      .start();
+
+  }
+
+  function onWindowResize() {
+
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    render();
+
+  }
+
+  function animate() {
+
+    requestAnimationFrame(animate);
+
+    TWEEN.update();
+
+    controls.update();
+
+  }
+
+  function render() {
+
+    renderer.render(scene, camera);
+
+  }
 </script>
 </html>
