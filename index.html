@@ -213,7 +213,7 @@ p.blue { color: blue; }</code></pre>
       design tokeny
       <h5>color palette</h5>
       <pre><code class="language-scss">
-       $ds-color__yellow--100: #FC30F;
+       $ds-color__yellow--100: #FFC30F;
        $ds-color__orange--100: #FF5733;
        $ds-color__red--100:    #C70039;
 </code>
@@ -245,13 +245,13 @@ p.blue { color: blue; }</code></pre>
     </div>
 
     <div id="tokens3" class="step list" data-x="20200" data-y="-400" style="width: 800px;">
-      <h5>button base</h5>
+      <h5>rozložení</h5>
       <pre><code class="language-scss">
        .ds-button {
          display: flex;
        }
 </code></pre>
-      <h5>button Theme</h5>
+      <h5>vizuální téma</h5>
       <pre><code class="language-scss">
        $button-border-style: solid;
 
@@ -262,28 +262,36 @@ p.blue { color: blue; }</code></pre>
        }
 </code>
 </pre>
-      <h5>button colorset</h5>
+      <h5>barevné téma</h5>
       <pre><code class="language-scss">
-       $button--primary-color-background: $ds-color__yellow--100;
-       $button--primary-color-border: $ds-color__orange--100;
+       $button--primary-color__background: $ds-color__yellow--100;
+       $button--primary-color__border: $ds-color__orange--100;
+       $button--primary-color__text: $ds-color__orange--100;
 
        .ds-button--primary {
-          background-color: $button--primary-color-background;
-          border-color: $button--primary-color-border;
+          background-color: $button--primary-color__background;
+          border-color: $button--primary-color__border;
+          color: $button--primary-color__text;
        }
        </code>
       </pre>
     </div>
 
-    <div id="result" class="step list" data-x="22200" data-y="-400">
+    <div id="result1" class="step list" data-x="22200" data-y="-400">
+      <button class="ds-button ds-button--primary">BUTTON</button>
+      <button class="ds-button ds-button--diff">button</button>
+      <button class="ds-button ds-button--none">button</button>
+    </div>
+
+    <div id="result2" class="step list" data-x="24200" data-y="-400">
       <ul>
-        <li>aktuální</li>
-        <li>rozšířitelný</li>
-        <li>přehledný</li>
+        <li>definovaný designéry</li>
+        <li>vždy aktuální</li>
+        <li>jenodduše rozšířitelný</li>
       </ul>
     </div>
 
-    <div id="thankyou" class="step thankyou" data-x="24400" data-y="-400">
+    <div id="thankyou" class="step thankyou" data-x="26400" data-y="-400">
       <h1>DÍKY</h1>
     </div>
 </div>

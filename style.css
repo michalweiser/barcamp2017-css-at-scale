@@ -276,7 +276,7 @@
 button {
   color: rgba(127,255,255,0.75);
   background: transparent;
-  outline: 1px solid rgba(127,255,255,0.75);
+  /*outline: 1px solid rgba(127,255,255,0.75);*/
   border: 0px;
   padding: 5px 10px;
   cursor: pointer;
@@ -299,4 +299,33 @@ pre {
 h5 {
       margin: 0;
     line-height: 40px;
+}
+
+.ds-button {
+  display: inline-flex;
+  border: 1px solid #FF5733;
+  font-size: 40px;
+  line-height: 40px;
+  padding: 16px 8px;
+}
+
+.ds-button--primary {
+  background-color: #FFC30F;
+  color: #FF5733;
+}
+
+
+.ds-button--diff {
+  border: 2px dashed white;
+  font-size: 30px;
+  line-height: 30px;
+  padding: 16px 8px;
+  background-color: blue;
+  color: white;
+}
+
+.ds-button--none {
+  border: 0;
+  background: transparent;
+  color: green;
 }
